@@ -91,8 +91,12 @@ class issuer {
     public static function require_read_only(stdClass $service): void {
         global $DB;
 
-        $names = $DB->get_fieldset_select('external_services_functions', 'functionname',
-            'externalserviceid = ?', [$service->id]);
+        $names = $DB->get_fieldset_select(
+            'external_services_functions',
+            'functionname',
+            'externalserviceid = ?',
+            [$service->id]
+        );
         if (!$names) {
             throw new moodle_exception('serviceempty', 'local_ksehub', '', self::SERVICE);
         }

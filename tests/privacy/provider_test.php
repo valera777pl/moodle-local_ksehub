@@ -28,7 +28,6 @@ use core_privacy\local\metadata\collection;
  * @covers     \local_ksehub\privacy\provider
  */
 final class provider_test extends \advanced_testcase {
-
     public function test_metadata_names_what_leaves_moodle(): void {
         $collection = provider::get_metadata(new collection('local_ksehub'));
         $items = $collection->get_collection();

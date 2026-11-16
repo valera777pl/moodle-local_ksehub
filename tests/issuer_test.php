@@ -26,7 +26,6 @@ namespace local_ksehub;
  * @covers     \local_ksehub\issuer
  */
 final class issuer_test extends \advanced_testcase {
-
     /** @var string The read-only functions KSE Hub calls, as IT adds them to the service. */
     const FUNCTIONS = 'core_webservice_get_site_info,core_enrol_get_users_courses,gradereport_overview_get_course_grades,'
         . 'gradereport_user_get_grade_items,core_calendar_get_calendar_events,mod_assign_get_assignments,'
@@ -43,8 +42,8 @@ final class issuer_test extends \advanced_testcase {
         set_config('enablewebservices', 1);
         set_config('webserviceprotocols', 'rest');
         $generator = $this->getDataGenerator()->get_plugin_generator('core_webservice');
-        $service = $generator->create_service(array_merge(
-            ['name' => 'KSE Hub (read-only)', 'shortname' => issuer::SERVICE, 'enabled' => 1], $fields));
+        $defaults = ['name' => 'KSE Hub (read-only)', 'shortname' => issuer::SERVICE, 'enabled' => 1];
+        $service = $generator->create_service(array_merge($defaults, $fields));
         if ($functions !== null) {
             $generator->create_service_functions(['service' => issuer::SERVICE, 'functions' => $functions]);
         }
@@ -110,8 +109,15 @@ final class issuer_test extends \advanced_testcase {
         set_config('returnurl', 'https://example.org/back?x=1', 'local_ksehub');
         $this->assertSame('https://example.org/back?x=1', issuer::return_url());
 
-        foreach (['', 'http://kse-hub.vercel.app/api/moodle-plugin/return', 'javascript:alert(1)', '//evil.example',
-                'https://', 'https://a.example/"><script>'] as $bad) {
+        $bads = [
+            '',
+            'http://kse-hub.vercel.app/api/moodle-plugin/return',
+            'javascript:alert(1)',
+            '//evil.example',
+            'https://',
+            'https://a.example/"><script>',
+        ];
+        foreach ($bads as $bad) {
             set_config('returnurl', $bad, 'local_ksehub');
             $this->assert_error(fn() => issuer::return_url(), 'notconfigured');
         }
@@ -224,8 +230,12 @@ final class issuer_test extends \advanced_testcase {
         $this->student();
         $key = issuer::issue_token($service);
         $token = $DB->get_record('external_tokens', ['token' => $key], '*', MUST_EXIST);
-        $functions = $DB->get_fieldset_select('external_services_functions', 'functionname',
-            'externalserviceid = ?', [$token->externalserviceid]);
+        $functions = $DB->get_fieldset_select(
+            'external_services_functions',
+            'functionname',
+            'externalserviceid = ?',
+            [$token->externalserviceid]
+        );
         sort($functions);
         $expected = explode(',', self::FUNCTIONS);
         sort($expected);

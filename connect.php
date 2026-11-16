@@ -49,8 +49,8 @@ if (!issuer::valid_state($state)) {
 
 // Straight to the Google sign-in, the way admin/tool/mobile/launch.php does it with oauthsso=.
 if ($sso && (!isloggedin() || isguestuser()) && is_enabled_auth('oauth2')) {
-    redirect(new moodle_url('/auth/oauth2/login.php',
-        ['id' => $sso, 'sesskey' => sesskey(), 'wantsurl' => $url->out(false)]));
+    $oauthurl = new moodle_url('/auth/oauth2/login.php', ['id' => $sso, 'sesskey' => sesskey(), 'wantsurl' => $url->out(false)]);
+    redirect($oauthurl);
 }
 
 require_login(null, false);

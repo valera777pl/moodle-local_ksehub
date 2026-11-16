@@ -38,7 +38,6 @@ use Behat\Mink\Exception\ExpectationException;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class behat_local_ksehub extends behat_base {
-
     /**
      * The page posts back to the configured address with this user's key for kse_hub_readonly and this state.
      *
