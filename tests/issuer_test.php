@@ -29,7 +29,8 @@ final class issuer_test extends \advanced_testcase {
     /** @var string The read-only functions KSE Hub calls, as IT adds them to the service. */
     const FUNCTIONS = 'core_webservice_get_site_info,core_enrol_get_users_courses,gradereport_overview_get_course_grades,'
         . 'gradereport_user_get_grade_items,core_calendar_get_calendar_events,mod_assign_get_assignments,'
-        . 'mod_assign_get_submission_status,mod_quiz_get_quizzes_by_courses,mod_quiz_get_user_attempts,core_course_get_contents';
+        . 'mod_assign_get_submission_status,mod_quiz_get_quizzes_by_courses,mod_quiz_get_user_attempts,core_course_get_contents,'
+        . 'core_group_get_course_user_groups';
 
     /**
      * Web services on, REST on, and the service with the given functions.
